@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🎨 藝術提示生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        a, button {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #e8e8e8;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #888;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+        
+        .lang-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888;
+            padding: 8px 20px;
+            min-height: 44px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn.active {
+            background: rgba(254, 202, 87, 0.2);
+            border-color: #feca57;
+            color: #feca57;
+        }
+        
+        .prompt-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .prompt-box:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .category {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #48dbfb;
+            margin-bottom: 15px;
+        }
+        
+        .prompt {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        
+        .hint {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            border: none;
+            color: #1a1a2e;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.6);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888;
+            padding: 8px 16px;
+            min-height: 40px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: rgba(72, 219, 251, 0.2);
+            border-color: #48dbfb;
+            color: #48dbfb;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .favorites {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .favorites h3 {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .fav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .fav-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .fav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .fav-item span {
+            color: #666;
+            font-size: 0.75rem;
+        }
+        
+        .delete-fav {
+            color: #ff6b6b;
+            cursor: pointer;
+            padding: 5px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .fav-item:hover .delete-fav {
+            opacity: 1;
+        }
+        
+        .save-btn {
+            background: transparent;
+            border: 1px solid #feca57;
+            color: #feca57;
+            padding: 8px 20px;
+            min-height: 44px;
+            border-radius: 20px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .timestamp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #444;
+            font-size: 0.75rem;
+        }
+        
+        .footer-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        .footer-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #e8e8e8;
+            transform: translateY(-2px);
+        }
+        .footer-link svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .footer-link:hover svg {
+            filter: drop-shadow(0 0 8px rgba(225, 48, 108, 0.6));
+        }
+        
+        /* 手機版優化 */
+        @media (max-width: 480px) {
+            body { padding: 16px; }
+            h1 { font-size: 1.8rem; }
+            .prompt-box {
+                padding: 24px 20px;
+                min-height: 180px;
+            }
+            .prompt { font-size: 1.25rem; }
+            .generate-btn { padding: 16px 36px; font-size: 1.1rem; }
+            .delete-fav { opacity: 1; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+            .favorites { margin-bottom: 80px; }
+            .timestamp, .footer-link {
+                bottom: max(16px, env(safe-area-inset-bottom));
+            }
+            .footer-link { left: 16px; padding: 10px 14px; }
+            .timestamp { right: 16px; font-size: 0.7rem; }
+        }
+        
+        @media (max-width: 360px) {
+            h1 { font-size: 1.5rem; }
+            .filter-btn { padding: 6px 12px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="pageTitle">🎨 藝術提示生成器</h1>
+        <p class="subtitle" id="pageSubtitle">為你的下一幅作品提供靈感</p>
+        
+        <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="zh">中文</button>
+            <button class="lang-btn" data-lang="en">English</button>
+        </div>
+        
+        <div class="filters" id="filters">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="abstract">抽象</button>
+            <button class="filter-btn" data-filter="nature">自然</button>
+            <button class="filter-btn" data-filter="emotion">情感</button>
+            <button class="filter-btn" data-filter="character">人物</button>
+            <button class="filter-btn" data-filter="technique">技巧</button>
+        </div>
+        
+        <div class="prompt-box">
+            <div class="category" id="category">點擊生成</div>
+            <div class="prompt" id="prompt">按下按鈕釋放創意</div>
+            <div class="hint" id="hint"></div>
+            <button class="save-btn" id="saveBtn" onclick="saveFavorite()">★ 收藏</button>
+        </div>
+        
+        <button class="generate-btn" id="generateBtn" onclick="generatePrompt()">✨ 生成</button>
+        
+        <div class="favorites">
+            <h3 id="favoritesTitle">★ 收藏列表</h3>
+            <div class="fav-list" id="favList"></div>
+        </div>
+    </div>
+    
+    <a href="https://www.instagram.com/bfhmcva" target="_blank" rel="noopener noreferrer" class="footer-link" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+            <span>@bfhmcva</span>
+        </a>
+    
+    <div class="timestamp"><span id="timestampLabel">香港時間:</span> <span id="hkTime"></span></div>
+    
+    <script>
+        const prompts = {
+            zh: {
+                abstract: [
+                    { text: "暖色調的重疊幾何形狀", hint: "思考：包浩斯風格遇見日落" },
+                    { text: "混沌線條代表城市噪音", hint: "使用快速、充滿活力的筆觸" },
+                    { text: "簡約主義的漸變填充圓形", hint: "專注色彩和諧" },
+                    { text: "對比質感的流動形態", hint: "平滑對粗糙，光對暗" },
+                    { text: "靈感來自香港天際線的網格色塊", hint: "城市活力" },
+                    { text: "故意不對稱的鏡像", hint: "以不平衡達到平衡" },
+                    { text: "層疊透明形狀創造深度", hint: "想像彩色玻璃" }
+                ],
+                nature: [
+                    { text: "雨滴落在竹葉上", hint: "專注負空間" },
+                    { text: "藍色時刻的香港港口", hint: "捕捉金粉色天空" },
+                    { text: "在混凝土中生長的野花", hint: "都市自然" },
+                    { text: "大嶼山的霧中山脈", hint: "大氣透視" },
+                    { text: "寺廟池塘中的倒影", hint: "對稱+扭曲" },
+                    { text: "獅子山上空的月亮", hint: "剪影+漸變天空" },
+                    { text: "霓虹城市中的秋葉", hint: "季節遇上都市" }
+                ],
+                emotion: [
+                    { text: "星期一早晨的沉重", hint: "深色調，沉重形狀" },
+                    { text: "從中心爆發的喜悅", hint: "徑向能量，明亮色彩" },
+                    { text: "對童年的懷舊", hint: "柔和邊緣，淡雅色調" },
+                    { text: "焦慮如纏繞的線", hint: "相互連接的混沌" },
+                    { text: "在簡單中找到平靜", hint: "留白，安靜色彩" },
+                    { text: "父母與孩子之間的愛", hint: "溫暖，擁抱的形態" },
+                    { text: "對明天的希望", hint: "光線突破黑暗" }
+                ],
+                character: [
+                    { text: "被創意包圍的疲倦老師", hint: "用色彩對比疲憊" },
+                    { text: "第一次發現藝術的孩子", hint: "睜大的眼睛，好奇" },
+                    { text: "幾何特徵的抽象肖像", hint: "畢加索風格" },
+                    { text: "沉浸在音樂中的音樂家", hint: "流暢線條，節奏" },
+                    { text: "教摺紙的長者雙手", hint: "皺紋說故事" },
+                    { text: "靜止在動作中的舞者", hint: "靜止中的能量" },
+                    { text: "你童年時的想像朋友", hint: "佢係咁既樣？" }
+                ],
+                technique: [
+                    { text: "單色調加一個強調色", hint: "90%黑白，10%突出" },
+                    { text: "連續線條繪畫（不提起筆）", hint: "一筆到底，無限可能" },
+                    { text: "負空間作為主體", hint: "留白很重要" },
+                    { text: "只用對比色", hint: "藍/橙，紅/綠，黃/紫" },
+                    { text: "探索家居物品的質感", hint: "海綿、叉、牙刷" },
+                    { text: "明暗對比：強光/黑暗", hint: "林布蘭風格" },
+                    { text: "用彩色圓點的點描派", hint: "小痕跡，大影響" }
+                ]
+            },
+            en: {
+                abstract: [
+                    { text: "Overlapping geometric shapes in warm colors", hint: "Think: Bauhaus meets sunset" },
+                    { text: "Chaotic lines representing urban noise", hint: "Use rapid, energetic strokes" },
+                    { text: "Minimalist circles with gradient fills", hint: "Focus on color harmony" },
+                    { text: "Fluid forms in contrasting textures", hint: "Smooth vs. rough, light vs. dark" },
+                    { text: "Grid-based color blocks inspired by Hong Kong skyline", hint: "Urban vibrancy" },
+                    { text: "Mirror image with intentional asymmetry", hint: "Balance through imbalance" },
+                    { text: "Layered transparent shapes creating depth", hint: "Think stained glass" }
+                ],
+                nature: [
+                    { text: "Rain droplets on bamboo leaves", hint: "Focus on negative space" },
+                    { text: "Hong Kong harbor at blue hour", hint: "Capture the golden-pink sky" },
+                    { text: "Wildflowers growing through concrete", hint: "Urban nature" },
+                    { text: "Misty mountain in Lantau", hint: "Atmospheric perspective" },
+                    { text: "Reflection in a temple pond", hint: "Symmetry + distortion" },
+                    { text: "Moon over Lion Rock", hint: "Silhouette + gradient sky" },
+                    { text: "Autumn leaves in neon city", hint: "Season meets urban" }
+                ],
+                emotion: [
+                    { text: "The weight of Monday morning", hint: "Darker tones, heavy shapes" },
+                    { text: "Joy exploding from the center", hint: "Radial energy, bright colors" },
+                    { text: "Nostalgia for childhood", hint: "Soft edges, muted palette" },
+                    { text: "Anxiety as tangled threads", hint: "Interconnected chaos" },
+                    { text: "Peace found in simplicity", hint: "Empty space, quiet colors" },
+                    { text: "Love between parent and child", hint: "Warm, embracing forms" },
+                    { text: "Hope for tomorrow", hint: "Light breaking through" }
+                ],
+                character: [
+                    { text: "A tired teacher surrounded by creativity", hint: "Contrast exhaustion with color" },
+                    { text: "A child discovering art for the first time", hint: "Wide eyes, wonder" },
+                    { text: "Abstract portrait with geometric features", hint: "Picasso-inspired" },
+                    { text: "A musician lost in their music", hint: "Flowing lines, rhythm" },
+                    { text: "Elderly hands teaching origami", hint: "Story through wrinkles" },
+                    { text: "A dancer frozen mid-motion", hint: "Energy in stillness" },
+                    { text: "Your imaginary friend from childhood", hint: "What did they look like?" }
+                ],
+                technique: [
+                    { text: "Monochrome with one accent color", hint: "90% black/white, 10% pop" },
+                    { text: "Continuous line drawing (no lifting)", hint: "One stroke, infinite possibilities" },
+                    { text: "Negative space as the subject", hint: "What you leave out matters" },
+                    { text: "Complementary colors only", hint: "Blue/orange, red/green, yellow/purple" },
+                    { text: "Texture exploration with household items", hint: "Sponge, fork, toothbrush" },
+                    { text: "Chiaroscuro: strong light/dark", hint: "Rembrandt style" },
+                    { text: "Pointillism with colored dots", hint: "Tiny marks, big impact" }
+                ]
+            }
+        };
+        
+        let currentLang = 'zh';
+        let currentFilter = 'all';
+        
+        const filterNames = {
+            zh: { all: '全部', abstract: '抽象', nature: '自然', emotion: '情感', character: '人物', technique: '技巧' },
+            en: { all: 'All', abstract: 'Abstract', nature: 'Nature', emotion: 'Emotion', character: 'Character', technique: 'Technique' }
+        };
+        
+        const uiStrings = {
+            zh: {
+                title: '🎨 藝術提示生成器',
+                subtitle: '為你的下一幅作品提供靈感',
+                defaultCategory: '點擊生成',
+                defaultPrompt: '按下按鈕釋放創意',
+                generateBtn: '✨ 生成',
+                saveBtn: '★ 收藏',
+                favoritesTitle: '★ 收藏列表',
+                timestampLabel: '香港時間:'
+            },
+            en: {
+                title: '🎨 Art Prompt Generator',
+                subtitle: 'Spark creativity for your next piece',
+                defaultCategory: 'Click to generate',
+                defaultPrompt: 'Click the button below to spark creativity',
+                generateBtn: '✨ Generate',
+                saveBtn: '★ Save',
+                favoritesTitle: '★ Favorites',
+                timestampLabel: 'HK Time:'
+            }
+        };
+        
+        function generatePrompt() {
+            const langData = prompts[currentLang];
+            let allPrompts = [];
+            
+            if (currentFilter === 'all') {
+                Object.values(langData).forEach(cat => {
+                    allPrompts = allPrompts.concat(cat);
+                });
+            } else {
+                allPrompts = langData[currentFilter] || [];
+            }
+            
+            const random = allPrompts[Math.floor(Math.random() * allPrompts.length)];
+            
+            const filterKeys = Object.keys(langData);
+            const displayFilter = currentFilter === 'all' 
+                ? filterKeys[Math.floor(Math.random() * filterKeys.length)]
+                : currentFilter;
+            
+            document.getElementById('category').textContent = filterNames[currentLang][displayFilter].toUpperCase();
+            document.getElementById('prompt').textContent = random.text;
+            document.getElementById('hint').textContent = random.hint;
+            
+            // Animation
+            const box = document.querySelector('.prompt-box');
+            box.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                box.style.transform = 'scale(1)';
+            }, 150);
+        }
+        
+        // Language toggle
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLang = btn.dataset.lang;
+                updateFilterLabels();
+                updateUILabels();
+                if (!isPlaceholderState()) generatePrompt();
+            });
+        });
+        
+        function updateFilterLabels() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const filter = btn.dataset.filter;
+                btn.textContent = filterNames[currentLang][filter];
+            });
+        }
+        
+        function isPlaceholderState() {
+            const prompt = document.getElementById('prompt').textContent;
+            return prompt === uiStrings.zh.defaultPrompt || prompt === uiStrings.en.defaultPrompt;
+        }
+        
+        function updateUILabels() {
+            const u = uiStrings[currentLang];
+            document.getElementById('pageTitle').textContent = u.title;
+            document.getElementById('pageSubtitle').textContent = u.subtitle;
+            document.getElementById('generateBtn').textContent = u.generateBtn;
+            document.getElementById('saveBtn').textContent = u.saveBtn;
+            document.getElementById('favoritesTitle').textContent = u.favoritesTitle;
+            document.getElementById('timestampLabel').textContent = u.timestampLabel;
+            if (isPlaceholderState()) {
+                document.getElementById('category').textContent = u.defaultCategory;
+                document.getElementById('prompt').textContent = u.defaultPrompt;
+            }
+        }
+        
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+            });
+        });
+        
+        // Favorites - store { text, hint } for both prompt and hint
+        function loadFavorites() {
+            const favs = JSON.parse(localStorage.getItem('artPromptFavs') || '[]');
+            const list = document.getElementById('favList');
+            list.innerHTML = '';
+            
+            favs.forEach((fav, index) => {
+                const text = typeof fav === 'string' ? fav : fav.text;
+                const hint = typeof fav === 'string' ? '' : (fav.hint || '');
+                const displayText = hint ? `${text}<br><small style="color:#666;font-size:0.85em">${hint}</small>` : text;
+                
+                const item = document.createElement('div');
+                item.className = 'fav-item';
+                item.innerHTML = `
+                    <span>${displayText}</span>
+                    <span class="delete-fav" onclick="deleteFav(${index})">✕</span>
+                `;
+                item.onclick = (e) => {
+                    if (!e.target.classList.contains('delete-fav')) {
+                        document.getElementById('prompt').textContent = text;
+                        document.getElementById('hint').textContent = hint;
+                    }
+                };
+                list.appendChild(item);
+            });
+        }
+        
+        function saveFavorite() {
+            const text = document.getElementById('prompt').textContent;
+            const hint = document.getElementById('hint').textContent;
+            const placeholders = [uiStrings.zh.defaultPrompt, uiStrings.en.defaultPrompt];
+            if (text && !placeholders.includes(text)) {
+                const favs = JSON.parse(localStorage.getItem('artPromptFavs') || '[]');
+                const newFav = { text, hint };
+                const exists = favs.some(f => (typeof f === 'string' ? f === text : f.text === text && (f.hint || '') === (hint || '')));
+                if (!exists) {
+                    favs.push(newFav);
+                    localStorage.setItem('artPromptFavs', JSON.stringify(favs));
+                    loadFavorites();
+                }
+            }
+        }
+        
+        function deleteFav(index) {
+            const favs = JSON.parse(localStorage.getItem('artPromptFavs') || '[]');
+            favs.splice(index, 1);
+            localStorage.setItem('artPromptFavs', JSON.stringify(favs));
+            loadFavorites();
+        }
+        
+        // HK Time
+        function updateTime() {
+            const now = new Date();
+            const hkTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Hong_Kong' }));
+            document.getElementById('hkTime').textContent = hkTime.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        }
+        updateTime();
+        setInterval(updateTime, 60000);
+        
+        updateUILabels();
+        loadFavorites();
+    </script>
+</body>
+</html>
