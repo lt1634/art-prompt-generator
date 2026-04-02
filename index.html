@@ -440,6 +440,24 @@
             </select>
         </div>
         
+        <!-- Negative Prompt Helper -->
+        <div class="neg-prompt-box">
+            <div class="section-label">🚫 Negative Prompt（--no 排除）</div>
+            <div class="neg-grid">
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="watermark"> watermark</label>
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="text"> text</label>
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="logo, signature"> logo / signature</label>
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="blurry, out of focus"> blurry</label>
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="extra fingers"> extra fingers</label>
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="deformed, ugly"> deformed / ugly</label>
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="low quality, jpeg artifacts"> low quality</label>
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="oversaturated"> oversaturated</label>
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="anime, cartoon style"> anime / cartoon</label>
+                <label class="neg-item"><input type="checkbox" class="neg-check" value="photorealistic"> photorealistic</label>
+            </div>
+            <div class="neg-summary" id="negSummary">揀選要排除的元素 → 自動加入 --no</div>
+        </div>
+
         <!-- Platform Tips -->
         <div style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0;">
             <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Platform 提示</div>
@@ -462,6 +480,7 @@
                 <div><strong>Mood:</strong> <span id="detailMood">-</span></div>
                 <div><strong>Colors:</strong> <span id="detailColors">-</span></div>
                 <div id="detailParams" style="display:none; margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1);"><strong>Midjourney:</strong> <span id="detailMjParams">-</span></div>
+                <div id="detailNeg" style="display:none; margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1); color: var(--accent);"><strong>--no:</strong> <span id="detailNegParams">-</span></div>
             </div>
         </div>
         
@@ -489,6 +508,14 @@
             </div>
         </div>
         
+        <!-- Recent Prompts -->
+        <div class="recent">
+            <h3>🕘 最近 (<span id="recentCount">0</span>)</h3>
+            <div class="recent-list" id="recentList">
+                <p class="recent-empty">未有記錄</p>
+            </div>
+        </div>
+
         <footer>
             Made by Tim | 香港美術老師
         </footer>
@@ -582,10 +609,15 @@
         
         let currentPrompt = null;
         let favorites = [];
+        let recentPrompts = [];
         try {
             favorites = JSON.parse(localStorage.getItem('artPrompts_favorites') || '[]');
             if (!Array.isArray(favorites)) favorites = [];
         } catch (e) { favorites = []; }
+        try {
+            recentPrompts = JSON.parse(localStorage.getItem('artPrompts_recent') || '[]');
+            if (!Array.isArray(recentPrompts)) recentPrompts = [];
+        } catch (e) { recentPrompts = []; }
         
         // Generate Prompt
         function generatePrompt() {
@@ -605,6 +637,7 @@
             
             const random = pool[Math.floor(Math.random() * pool.length)];
             let promptText = random.text;
+            const negVals = getNegVals();
             
             // Apply imperfect/authentic modifiers
             if (imperfectMode) {
@@ -619,17 +652,15 @@
                 promptText += modifier;
             }
             
-            // Apply Midjourney V8 parameters
-            const mjHd = document.getElementById('mjHd').checked;
-            const mjQ4 = document.getElementById('mjQ4').checked;
-            const mjVary = document.getElementById('mjVary').checked;
-            const mjNiji = document.getElementById('mjNiji').checked;
-            if (mjHd) promptText += " --hd";
-            if (mjQ4) promptText += " --q 4";
-            if (mjVary) promptText += " --vary";
-            if (mjNiji) promptText += " --niji 7";
+            // Apply parameters (negatives + Midjourney V8)
+            const mjParts = [];
+            if (negVals.length > 0) mjParts.push('--no ' + negVals.join(', '));
+            if (document.getElementById('mjHd').checked) mjParts.push('--hd');
+            if (document.getElementById('mjQ4').checked) mjParts.push('--q 4');
+            if (document.getElementById('mjVary').checked) mjParts.push('--vary');
+            if (document.getElementById('mjNiji').checked) mjParts.push('--niji 7');
             
-            // Apply camera/lens parameters (from dropdown or random if none selected)
+            // Apply camera/lens (dropdown or random)
             const cameraSelect = document.getElementById('cameraSelect');
             const selectedCam = cameraSelect.value;
             if (selectedCam) {
@@ -646,19 +677,14 @@
                 const camParam = cameraParams[Math.floor(Math.random() * cameraParams.length)];
                 promptText += camParam;
             }
-            
+
+            // Append MJ params
+            if (mjParts.length > 0) promptText += ' ' + mjParts.join(' ');
+
             // Add retry tip
             promptText += "\n\n💡 Tip: Submit multiple times for different results";
             
             currentPrompt = { text: promptText, style: random.style, mood: random.mood, colors: random.colors };
-            
-            // Build Midjourney params string
-            let mjParamsList = [];
-            if (mjHd) mjParamsList.push("--hd");
-            if (mjQ4) mjParamsList.push("--q 4");
-            if (mjVary) mjParamsList.push("--vary");
-            if (mjNiji) mjParamsList.push("--niji 7");
-            const mjParamsStr = mjParamsList.length > 0 ? mjParamsList.join(" ") : "None";
             
             // Display
             const catNames = { parenting: '👨‍👩‍👧 親子活動', teaching: '🏫 教學', art: '🎨 藝術', nature: '🌳 自然', character: '👤 人物', '3d': '🧊 3D', chibi: '🧸 Chibi' };
@@ -670,13 +696,29 @@
             document.getElementById('detailColors').textContent = random.colors;
             
             // Show Midjourney params in details
+            const nonNegParts = mjParts.filter(function(p) { return !p.startsWith('--no'); });
             const detailParams = document.getElementById('detailParams');
-            if (mjParamsList.length > 0 || selectedCam) {
+            if (nonNegParts.length > 0) {
                 detailParams.style.display = 'block';
-                document.getElementById('detailMjParams').textContent = mjParamsStr + (selectedCam ? " + Camera" : "");
+                document.getElementById('detailMjParams').textContent = nonNegParts.join(' ');
             } else {
                 detailParams.style.display = 'none';
             }
+
+            // Show negative prompt in details
+            const detailNeg = document.getElementById('detailNeg');
+            if (negVals.length > 0) {
+                detailNeg.style.display = 'block';
+                document.getElementById('detailNegParams').textContent = negVals.join(', ');
+            } else {
+                detailNeg.style.display = 'none';
+            }
+
+            // Save to recent
+            recentPrompts.unshift({ text: promptText, style: random.style, timestamp: Date.now() });
+            if (recentPrompts.length > 5) recentPrompts = recentPrompts.slice(0, 5);
+            localStorage.setItem('artPrompts_recent', JSON.stringify(recentPrompts));
+            renderRecent();
         }
         
         // Category Filter
@@ -794,6 +836,50 @@
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
         
+        // Negative Prompt Helper
+        function getNegVals() {
+            return Array.from(document.querySelectorAll('.neg-check:checked')).map(function(cb) { return cb.value; });
+        }
+        document.querySelectorAll('.neg-check').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                var v = getNegVals();
+                document.getElementById('negSummary').textContent = v.length > 0 ? '--no ' + v.join(', ') : '揀選要排除的元素 → 自動加入 --no';
+            });
+        });
+
+        // Recent Prompts functions
+        function useRecent(i) {
+            currentPrompt = { text: recentPrompts[i].text, style: recentPrompts[i].style };
+            document.getElementById('promptText').textContent = recentPrompts[i].text;
+            document.getElementById('categoryLabel').textContent = '🕘 最近';
+            document.getElementById('promptDetails').style.display = 'block';
+            document.getElementById('detailStyle').textContent = recentPrompts[i].style;
+            document.getElementById('detailMood').textContent = '-';
+            document.getElementById('detailColors').textContent = '-';
+            document.getElementById('detailParams').style.display = 'none';
+            document.getElementById('detailNeg').style.display = 'none';
+        }
+        function copyRecent(i) {
+            navigator.clipboard.writeText(recentPrompts[i].text);
+            showToast('已複製！');
+        }
+        function deleteRecent(i) {
+            recentPrompts.splice(i, 1);
+            localStorage.setItem('artPrompts_recent', JSON.stringify(recentPrompts));
+            renderRecent();
+        }
+        function renderRecent() {
+            var list = document.getElementById('recentList');
+            document.getElementById('recentCount').textContent = recentPrompts.length;
+            if (recentPrompts.length === 0) {
+                list.innerHTML = '<p class="recent-empty">未有記錄</p>';
+                return;
+            }
+            list.innerHTML = recentPrompts.map(function(r, i) {
+                return '<div class="recent-item"><div class="recent-text">' + r.text.substring(0,60) + '...</div><div class="recent-actions"><button class="recent-btn" onclick="useRecent(' + i + ')" title="使用">📖</button><button class="recent-btn" onclick="copyRecent(' + i + ')" title="複製">📋</button><button class="recent-btn" onclick="deleteRecent(' + i + ')" title="刪除">🗑️</button></div></div>';
+            }).join('');
+        }
+
         // Platform tip display
         const platformSelect = document.getElementById('platformSelect');
         const platformTip = document.getElementById('platformTip');
@@ -806,6 +892,7 @@
         
         // Init
         renderFavorites();
+        renderRecent();
     </script>
 </body>
 </html>
