@@ -441,6 +441,25 @@
             </select>
         </div>
         
+        <!-- Aspect Ratio Selector (V8 compatible) -->
+        <div style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0;">
+            <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">📐 Aspect Ratio（--ar）</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value="" checked style="display:none;">隨機</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 1:1" style="display:none;">1:1 □</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 3:2" style="display:none;">3:2 ▭</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 2:3" style="display:none;">2:3 ▯</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 4:3" style="display:none;">4:3 ▭</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 3:4" style="display:none;">3:4 ▯</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 16:9" style="display:none;">16:9 ▭</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 21:9" style="display:none;">🔥 21:9 超寬</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 5:4" style="display:none;">🆕 5:4</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 4:5" style="display:none;">🆕 4:5</label>
+                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 6:11" style="display:none;">🆕 6:11</label>
+            </div>
+            <div id="arHint" style="font-size: 11px; color: var(--muted); margin-top: 8px;">🆕 = V8 Alpha 新比例（2026-03-17）</div>
+        </div>
+
         <!-- Negative Prompt Helper -->
         <div class="neg-prompt-box">
             <div class="section-label">🚫 Negative Prompt（--no 排除）</div>
@@ -670,7 +689,12 @@
             if (document.getElementById('mjQ4').checked) mjParts.push('--q 4');
             if (document.getElementById('mjVary').checked) mjParts.push('--vary');
             if (document.getElementById('mjNiji').checked) mjParts.push('--niji 7');
-            
+
+            // Apply aspect ratio (V8 new ratios: 5:4, 4:5, 6:11, 21:9)
+            const arSelected = document.querySelector('input[name="aspectRatio"]:checked');
+            const arValue = arSelected ? arSelected.value : '';
+            if (arValue) mjParts.push(arValue.trim());
+
             // Apply camera/lens (dropdown or random)
             const cameraSelect = document.getElementById('cameraSelect');
             const selectedCam = cameraSelect.value;
@@ -698,7 +722,7 @@
             currentPrompt = { text: promptText, style: random.style, mood: random.mood, colors: random.colors };
             
             // Display
-            const catNames = { parenting: '👨‍👩‍👧 親子活動', teaching: '🏫 教學', art: '🎨 藝術', nature: '🌳 自然', character: '👤 人物', '3d': '🧊 3D', chibi: '🧸 Chibi' };
+            const catNames = { parenting: '👨‍👩‍👧 親子活動', teaching: '🏫 教學', art: '🎨 藝術', nature: '🌳 自然', character: '👤 人物', '3d': '🧊 3D', chibi: '🧸 Chibi', ink: '🖌️ 水墨' };
             document.getElementById('categoryLabel').textContent = catNames[activeCat] || '全部';
             document.getElementById('promptText').textContent = promptText;
             document.getElementById('promptDetails').style.display = 'block';
