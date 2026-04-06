@@ -487,6 +487,7 @@
                 <option value="chatgpt">ChatGPT (DALL-E)</option>
                 <option value="stable">Stable Diffusion</option>
                 <option value="niji">Niji Journey</option>
+                <option value="flux">FLUX 2 Pro</option>
             </select>
             <div id="platformTip" style="font-size: 12px; color: var(--muted); line-height: 1.5;"></div>
         </div>
@@ -634,7 +635,8 @@
             midjourney: "💡 Midjourney: Use --ar 3:4 for portrait, --q 2 for quality, --s 750 for stylize. Add 'masterpiece' and 'best quality' for better results.",
             chatgpt: "💡 DALL-E: Describe scene directly in natural language. Include artistic style, lighting mood, and color palette in one sentence. No need for camera parameters.",
             stable: "💡 Stable Diffusion: Use commas to separate elements. Add quality tags: 'masterpiece, best quality'. Use (brackets) for emphasis: (emphasis). Use [brackets] to de-emphasize.",
-            niji: "💡 Niji Journey: Add '--niji 6/7' for anime mode. Use anime-specific terms: 'anime screencap', 'semi-realistic', 'cel shading'. Great for character design and manga style."
+            niji: "💡 Niji Journey: Add '--niji 6/7' for anime mode. Use anime-specific terms: 'anime screencap', 'semi-realistic', 'cel shading'. Great for character design and manga style.",
+            flux: "💡 FLUX 2 Pro: Write in natural prose like describing to a human artist. No negative prompts — use positive phrasing ('sharp focus' not 'no blur'). 30–80 words is ideal. Front-load the subject — AI prioritizes the beginning of your prompt."
         };
         
         let currentPrompt = null;
