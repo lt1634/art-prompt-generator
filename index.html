@@ -421,6 +421,9 @@
                 <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
                     <input type="checkbox" id="mjNiji" style="accent-color: var(--accent);"> --niji 7 (動漫風)
                 </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="mjRaw" style="accent-color: var(--accent);"> --raw (真實攝影)
+                </label>
             </div>
         </div>
         
@@ -691,6 +694,7 @@
             if (document.getElementById('mjQ4').checked) mjParts.push('--q 4');
             if (document.getElementById('mjVary').checked) mjParts.push('--vary');
             if (document.getElementById('mjNiji').checked) mjParts.push('--niji 7');
+            if (document.getElementById('mjRaw').checked) mjParts.push('--raw');
 
             // Apply aspect ratio (V8 new ratios: 5:4, 4:5, 6:11, 21:9)
             const arSelected = document.querySelector('input[name="aspectRatio"]:checked');
