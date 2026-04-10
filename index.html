@@ -511,6 +511,7 @@
         <!-- Buttons -->
         <div class="btn-row">
             <button class="btn btn-primary" onclick="generatePrompt()">
+                <button class="btn btn-variation" onclick="generateVariation()">🔄 變體
                 🎲 生成
             </button>
             <button class="btn btn-secondary" onclick="sharePrompt()">
@@ -762,6 +763,38 @@
             renderRecent();
         }
         
+        // Variation Generator
+        function generateVariation() {
+            if (!currentPrompt || !currentPrompt.text) {
+                showToast("先生成一個提示先");
+                return;
+            }
+            const base = currentPrompt.text.split("\n\n")[0]; // Remove tip
+            // Generate 2 variations by modifying different parts
+            const variationTypes = [
+                { key: "style", prefix: "Change to " },
+                { key: "mood", prefix: "Change mood to " },
+                { key: "colors", prefix: "Use " }
+            ];
+            const variations = [];
+            for (let i = 0; i < 2; i++) {
+                const vType = variationTypes[i];
+                let newText = base;
+                if (vType.key === "style" && currentPrompt.style) {
+                    newText = base.replace(/style, [^,]+\.?/i, "").trim() + ", " + currentPrompt.style + " style";
+                } else if (vType.key === "mood" && currentPrompt.mood) {
+                    newText = base.replace(/mood, [^,]+\.?/i, "").trim() + ", " + currentPrompt.mood + " mood";
+                } else if (vType.key === "colors" && currentPrompt.colors) {
+                    newText = base.replace(/colors, [^,]+\.?/i, "").trim() + ", " + currentPrompt.colors;
+                }
+                variations.push(newText);
+            }
+            // Show variations in prompt text area
+            const varText = "🔄 變體 1:\n" + variations[0] + "\n\n🔄 變體 2:\n" + variations[1];
+            document.getElementById("promptText").textContent = varText;
+            showToast("已生成2個變體");
+        }
+
         // Category Filter
         document.querySelectorAll('.cat-btn').forEach(btn => {
             btn.addEventListener('click', () => {
