@@ -424,6 +424,9 @@
                 <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
                     <input type="checkbox" id="mjRaw" style="accent-color: var(--accent);"> --raw (真實攝影)
                 </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="mjSw" style="accent-color: var(--accent);"> --sw 100 (風格強度)
+                </label>
             </div>
         </div>
         
@@ -636,7 +639,7 @@
         // Platform tips database
         const platformTips = {
             auto: "",
-            midjourney: "💡 Midjourney V7/V8: Add --raw for authentic/photographic style (no aesthetic smoothing). Use --s 750 for stylize, --q 2 for quality. Voice prompt: describe scene aloud — V7 understands natural speech. Style Creator (V8): build personal style codes.",
+            midjourney: "💡 Midjourney V7/V8: Add --raw for authentic/photographic style (no aesthetic smoothing). Use --s 750 for stylize, --sw 100 for style reference strength, --q 2 for quality. Voice prompt: describe scene aloud — V7 understands natural speech. Style Creator (V8): build personal style codes.",
             chatgpt: "💡 DALL-E: Describe scene directly in natural language. Include artistic style, lighting mood, and color palette in one sentence. No need for camera parameters.",
             stable: "💡 Stable Diffusion: Use commas to separate elements. Add quality tags: 'masterpiece, best quality'. Use (brackets) for emphasis: (emphasis). Use [brackets] to de-emphasize.",
             niji: "💡 Niji Journey: Add '--niji 6/7' for anime mode. Use anime-specific terms: 'anime screencap', 'semi-realistic', 'cel shading'. Great for character design and manga style.",
@@ -696,6 +699,7 @@
             if (document.getElementById('mjVary').checked) mjParts.push('--vary');
             if (document.getElementById('mjNiji').checked) mjParts.push('--niji 7');
             if (document.getElementById('mjRaw').checked) mjParts.push('--raw');
+            if (document.getElementById('mjSw').checked) mjParts.push('--sw 100');
 
             // Apply aspect ratio (V8 new ratios: 5:4, 4:5, 6:11, 21:9)
             const arSelected = document.querySelector('input[name="aspectRatio"]:checked');
