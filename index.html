@@ -370,6 +370,92 @@
             opacity: 1;
         }
         
+        /* Image Reference Helper */
+        .img-ref-box {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .img-ref-box .section-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        .img-ref-input-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .img-ref-input {
+            flex: 1;
+            padding: 8px 12px;
+            background: var(--bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 13px;
+        }
+        .img-ref-input::placeholder {
+            color: var(--muted);
+        }
+        .img-ref-btn {
+            padding: 8px 16px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .img-ref-preview {
+            margin-top: 10px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        .img-ref-preview.active {
+            display: flex;
+        }
+        .img-ref-preview img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--accent);
+        }
+        .img-ref-output {
+            font-size: 12px;
+            color: var(--muted);
+            background: rgba(0,0,0,0.3);
+            padding: 8px 12px;
+            border-radius: 6px;
+            flex: 1;
+            word-break: break-all;
+        }
+        .img-ref-clear {
+            font-size: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            opacity: 0.6;
+            color: var(--text);
+        }
+        .img-ref-clear:hover { opacity: 1; }
+        .img-ref-tip {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        .img-ref-tip span {
+            color: var(--accent);
+        }
+        
         .toast.show {
             opacity: 1;
         }
@@ -511,12 +597,25 @@
             </div>
         </div>
         
+        <!-- Image Reference Helper -->
+        <div class="img-ref-box">
+            <div class="section-label">🖼️ Image Reference（V8.1 即將支援）</div>
+            <div class="img-ref-input-row">
+                <input type="text" class="img-ref-input" id="imgRefInput" placeholder="貼上圖片 URL（Midjourney / 任何公開連結）...">
+                <button class="img-ref-btn" onclick="applyImgRef()">✅ 套用</button>
+            </div>
+            <div class="img-ref-preview" id="imgRefPreview">
+                <img id="imgRefThumb" src="" alt="ref">
+                <div class="img-ref-output" id="imgRefOutput"></div>
+                <button class="img-ref-clear" onclick="clearImgRef()" title="清除">✕</button>
+            </div>
+            <div class="img-ref-tip">💡 V8.1 即將支援上傳圖片作為 Prompt 的一部分。一張參考圖勝過千言萬語。</div>
+        </div>
+
         <!-- Buttons -->
         <div class="btn-row">
-            <button class="btn btn-primary" onclick="generatePrompt()">
-                <button class="btn btn-variation" onclick="generateVariation()">🔄 變體
-                🎲 生成
-            </button>
+            <button class="btn btn-primary" onclick="generatePrompt()">🎲 生成</button>
+            <button class="btn btn-variation" onclick="generateVariation()">🔄 變體</button>
             <button class="btn btn-secondary" onclick="sharePrompt()">
                 📤 分享
             </button>
@@ -724,6 +823,12 @@
                 promptText += camParam;
             }
 
+            // Prepend image reference (V8.1 img URL support)
+            const imgRefUrl = document.getElementById('imgRefInput').value.trim();
+            if (imgRefUrl) {
+                promptText = imgRefUrl + ' ' + promptText;
+            }
+
             // Append MJ params
             if (mjParts.length > 0) promptText += ' ' + mjParts.join(' ');
 
@@ -915,6 +1020,47 @@
         }
         
         // Negative Prompt Helper
+        // Image Reference Helper
+        let imgRefActive = false;
+
+        function applyImgRef() {
+            const input = document.getElementById('imgRefInput');
+            const url = input.value.trim();
+            const preview = document.getElementById('imgRefPreview');
+            const thumb = document.getElementById('imgRefThumb');
+            const output = document.getElementById('imgRefOutput');
+
+            if (!url) {
+                showToast('請先貼上圖片 URL');
+                return;
+            }
+
+            // Basic URL validation
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                showToast('請輸入有效的 URL（需以 http:// 或 https:// 開頭）');
+                return;
+            }
+
+            imgRefActive = true;
+            thumb.src = url;
+            thumb.onerror = function() { thumb.style.display = 'none'; };
+            thumb.onload = function() { thumb.style.display = 'block'; };
+
+            // Show syntax hint
+            const filename = url.split('/').pop().substring(0, 30) || 'image';
+            output.textContent = url + ' [將自動加到 prompt 最前方] — V8.1 完整支援';
+            preview.classList.add('active');
+            showToast('已套用圖片參考！');
+        }
+
+        function clearImgRef() {
+            document.getElementById('imgRefInput').value = '';
+            document.getElementById('imgRefPreview').classList.remove('active');
+            document.getElementById('imgRefThumb').src = '';
+            document.getElementById('imgRefOutput').textContent = '';
+            imgRefActive = false;
+        }
+
         function getNegVals() {
             return Array.from(document.querySelectorAll('.neg-check:checked')).map(function(cb) { return cb.value; });
         }
