@@ -460,6 +460,90 @@
             opacity: 1;
         }
     </style>
+
+        /* Recent Prompts */
+        .recent {
+            margin-top: 20px;
+        }
+        .recent h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--muted);
+        }
+        .recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .recent-item {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .recent-text {
+            font-size: 14px;
+            flex: 1;
+            margin-right: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .recent-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .recent-btn {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .recent-btn:hover {
+            opacity: 1;
+        }
+        .recent-empty {
+            color: var(--muted);
+            font-size: 14px;
+        }
+        /* Export Import Buttons */
+        .export-import-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .btn-export {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-export:hover {
+            border-color: var(--accent);
+        }
+        .btn-import {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-import:hover {
+            border-color: var(--accent);
+        }
+
 </head>
 <body>
     <div class="container">
@@ -633,6 +717,13 @@
             <div class="fav-list" id="favList">
                 <p style="color: var(--muted); font-size: 14px;">未有收藏</p>
             </div>
+        </div>
+        
+        <!-- Export Import -->
+        <div class="export-import-row">
+            <button class="btn-export" onclick="exportData()">📤 匯出</button>
+            <button class="btn-import" onclick="document.getElementById('importFile').click()">📥 匯入</button>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
         </div>
         
         <!-- Recent Prompts -->
@@ -1114,6 +1205,55 @@
             platformTip.textContent = platformTips['auto'];
         }
         
+        // Export Data
+        function exportData() {
+            const data = {
+                favorites: favorites,
+                recentPrompts: recentPrompts,
+                exportDate: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'art-prompt-generator-backup-' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✅ 已匯出收藏同最近記錄！');
+        }
+
+        // Import Data
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.favorites && Array.isArray(data.favorites)) {
+                        favorites = data.favorites;
+                        localStorage.setItem('artPrompts_favorites', JSON.stringify(favorites));
+                    }
+                    
+                    if (data.recentPrompts && Array.isArray(data.recentPrompts)) {
+                        recentPrompts = data.recentPrompts;
+                        localStorage.setItem('artPrompts_recent', JSON.stringify(recentPrompts));
+                    }
+                    
+                    renderFavorites();
+                    renderRecent();
+                    showToast('✅ 已匯入 ' + (data.favorites ? data.favorites.length : 0) + ' 個收藏同 ' + (data.recentPrompts ? data.recentPrompts.length : 0) + ' 個最近記錄！');
+                } catch (err) {
+                    showToast('❌ 匯入失敗：檔案格式錯誤');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Reset input
+        }
+
         // Init
         renderFavorites();
         renderRecent();
