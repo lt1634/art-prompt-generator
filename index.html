@@ -575,8 +575,8 @@
             <span class="toggle-desc">真實/不完美</span>
         </div>
         
-        <!-- Midjourney Parameters -->
-        <div style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0;">
+        <!-- Midjourney Parameters (shown when platform = midjourney/niji/auto) -->
+        <div id="mjParamBox" style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0;">
             <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Midjourney V8 參數</div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
@@ -596,6 +596,50 @@
                 </label>
                 <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
                     <input type="checkbox" id="mjSw" style="accent-color: var(--accent);"> --sw 100 (風格強度)
+                </label>
+            </div>
+        </div>
+
+        <!-- FLUX Parameters (shown when platform = flux) -->
+        <div id="fluxParamBox" style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0; display: none;">
+            <div style="font-size: 12px; color: #00d4aa; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">FLUX 2 Pro 參數</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="fluxSharp" style="accent-color: #00d4aa;"> sharp focus
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="fluxDetail" style="accent-color: #00d4aa;"> high detail
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="fluxRealism" style="accent-color: #00d4aa;"> photorealistic
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="fluxNatural" style="accent-color: #00d4aa;"> natural lighting
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="fluxArtistic" style="accent-color: #00d4aa;"> artistic quality
+                </label>
+            </div>
+        </div>
+
+        <!-- DALL-E / SD Parameters (shown when platform = chatgpt/stable) -->
+        <div id="dalleParamBox" style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0; display: none;">
+            <div style="font-size: 12px; color: #f59e0b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">DALL-E / SD 提示增強</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="dalleStyle" style="accent-color: #f59e0b;"> --style vivid
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="dalleQuality" style="accent-color: #f59e0b;"> --quality high
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="dalleNatural" style="accent-color: #f59e0b;"> natural look
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="sdLora" style="accent-color: #f59e0b;"> SDXL + LoRA
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="sdControl" style="accent-color: #f59e0b;"> ControlNet ready
                 </label>
             </div>
         </div>
@@ -881,15 +925,34 @@
                 promptText += modifier;
             }
             
-            // Apply parameters (negatives + Midjourney V8)
-            const mjParts = [];
+            // Apply platform-specific parameters
+            var selectedPlatform = document.getElementById('platformSelect').value;
+            var mjParts = [];
             if (negVals.length > 0) mjParts.push('--no ' + negVals.join(', '));
-            if (document.getElementById('mjHd').checked) mjParts.push('--hd');
-            if (document.getElementById('mjQ4').checked) mjParts.push('--q 4');
-            if (document.getElementById('mjVary').checked) mjParts.push('--vary');
-            if (document.getElementById('mjNiji').checked) mjParts.push('--niji 7');
-            if (document.getElementById('mjRaw').checked) mjParts.push('--raw');
-            if (document.getElementById('mjSw').checked) mjParts.push('--sw 100');
+
+            if (selectedPlatform === 'flux') {
+                // FLUX 2 Pro: positive phrasing, no --no style
+                if (document.getElementById('fluxSharp') && document.getElementById('fluxSharp').checked) promptText += ', sharp focus, crisp details';
+                if (document.getElementById('fluxDetail') && document.getElementById('fluxDetail').checked) promptText += ', highly detailed, intricate textures';
+                if (document.getElementById('fluxRealism') && document.getElementById('fluxRealism').checked) promptText += ', photorealistic, realistic lighting and shadows';
+                if (document.getElementById('fluxNatural') && document.getElementById('fluxNatural').checked) promptText += ', natural lighting, soft ambient glow';
+                if (document.getElementById('fluxArtistic') && document.getElementById('fluxArtistic').checked) promptText += ', artistic quality, gallery worthy';
+            } else if (selectedPlatform === 'chatgpt' || selectedPlatform === 'stable') {
+                // DALL-E / SD extra qualifiers
+                if (document.getElementById('dalleStyle') && document.getElementById('dalleStyle').checked) promptText += ', style: vivid, bold colors';
+                if (document.getElementById('dalleQuality') && document.getElementById('dalleQuality').checked) promptText += ', high quality, detailed';
+                if (document.getElementById('dalleNatural') && document.getElementById('dalleNatural').checked) promptText += ', natural look, realistic';
+                if (document.getElementById('sdLora') && document.getElementById('sdLora').checked) promptText += ', SDXL, cinematic LoRA style';
+                if (document.getElementById('sdControl') && document.getElementById('sdControl').checked) promptText += ', ControlNet compatible composition';
+            } else {
+                // Midjourney / Niji / Auto: default MJ params
+                if (document.getElementById('mjHd').checked) mjParts.push('--hd');
+                if (document.getElementById('mjQ4').checked) mjParts.push('--q 4');
+                if (document.getElementById('mjVary').checked) mjParts.push('--vary');
+                if (document.getElementById('mjNiji').checked) mjParts.push('--niji 7');
+                if (document.getElementById('mjRaw').checked) mjParts.push('--raw');
+                if (document.getElementById('mjSw').checked) mjParts.push('--sw 100');
+            }
 
             // Apply aspect ratio (V8 new ratios: 5:4, 4:5, 6:11, 21:9)
             const arSelected = document.querySelector('input[name="aspectRatio"]:checked');
@@ -1200,9 +1263,24 @@
         const platformTip = document.getElementById('platformTip');
         if (platformSelect) {
             platformSelect.addEventListener('change', () => {
-                platformTip.textContent = platformTips[platformSelect.value] || '';
-            });
-            platformTip.textContent = platformTips['auto'];
+                // Update platform tip
+            platformTip.textContent = platformTips[platformSelect.value] || '';
+
+            // Toggle platform-specific parameter boxes
+            var p = platformSelect.value;
+            var mjBox = document.getElementById('mjParamBox');
+            var fluxBox = document.getElementById('fluxParamBox');
+            var dalleBox = document.getElementById('dalleParamBox');
+            if (mjBox) mjBox.style.display = (p === 'auto' || p === 'midjourney' || p === 'niji') ? 'block' : 'none';
+            if (fluxBox) fluxBox.style.display = (p === 'flux') ? 'block' : 'none';
+            if (dalleBox) dalleBox.style.display = (p === 'chatgpt' || p === 'stable') ? 'block' : 'none';
+        });
+        platformTip.textContent = platformTips['auto'];
+        // Init: show MJ box by default
+        (function initParamBox() {
+            var mjBox = document.getElementById('mjParamBox');
+            if (mjBox) mjBox.style.display = 'block';
+        })();
         }
         
         // Export Data
