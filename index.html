@@ -602,23 +602,63 @@
 
         <!-- FLUX Parameters (shown when platform = flux) -->
         <div id="fluxParamBox" style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0; display: none;">
-            <div style="font-size: 12px; color: #00d4aa; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">FLUX 2 Pro 參數</div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="fluxSharp" style="accent-color: #00d4aa;"> sharp focus
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="fluxDetail" style="accent-color: #00d4aa;"> high detail
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="fluxRealism" style="accent-color: #00d4aa;"> photorealistic
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="fluxNatural" style="accent-color: #00d4aa;"> natural lighting
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="fluxArtistic" style="accent-color: #00d4aa;"> artistic quality
-                </label>
+            <div style="font-size: 12px; color: #00d4aa; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">FLUX 2 Pro 風格參數</div>
+            <div style="margin-bottom: 12px;">
+                <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">膠片 / 數碼風格</div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxModernDigital" style="accent-color: #00d4aa;"> Modern Digital
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxDigicam" style="accent-color: #00d4aa;"> 2000s Digicam
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="flux80sVintage" style="accent-color: #00d4aa;"> 80s Vintage
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxAnalogFilm" style="accent-color: #00d4aa;"> Analog Film
+                    </label>
+                </div>
+            </div>
+            <div style="margin-bottom: 12px;">
+                <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">相機 / 鏡頭模擬</div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxHasselblad" style="accent-color: #00d4aa;"> Hasselblad X2D
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxSonyA7" style="accent-color: #00d4aa;"> Sony A7IV
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxCanon5D" style="accent-color: #00d4aa;"> Canon 5D MKIV
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxFujiXT" style="accent-color: #00d4aa;"> Fujifilm X-T5
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxGoldenHour" style="accent-color: #00d4aa;"> Golden Hour
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxShallowDOF" style="accent-color: #00d4aa;"> Shallow DOF
+                    </label>
+                </div>
+            </div>
+            <div>
+                <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">品質 / 技術</div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxSharp" style="accent-color: #00d4aa;"> Sharp Focus
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxDetail" style="accent-color: #00d4aa;"> High Detail
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxRealism" style="accent-color: #00d4aa;"> Photorealistic
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
+                        <input type="checkbox" id="fluxArtistic" style="accent-color: #00d4aa;"> Artistic Quality
+                    </label>
+                </div>
             </div>
         </div>
 
@@ -932,10 +972,22 @@
 
             if (selectedPlatform === 'flux') {
                 // FLUX 2 Pro: positive phrasing, no --no style
+                // Film/digital style
+                if (document.getElementById('fluxModernDigital') && document.getElementById('fluxModernDigital').checked) promptText += ', shot on Sony A7IV, clean sharp, high dynamic range';
+                if (document.getElementById('fluxDigicam') && document.getElementById('fluxDigicam').checked) promptText += ', early digital camera, slight noise, flash photography, candid, 2000s digicam style';
+                if (document.getElementById('flux80sVintage') && document.getElementById('flux80sVintage').checked) promptText += ', film grain, warm color cast, soft focus, 80s vintage photo';
+                if (document.getElementById('fluxAnalogFilm') && document.getElementById('fluxAnalogFilm').checked) promptText += ', shot on Kodak Portra 400, natural grain, organic colors';
+                // Camera/lens simulation
+                if (document.getElementById('fluxHasselblad') && document.getElementById('fluxHasselblad').checked) promptText += ', Hasselblad X2D, 80mm lens, f/2.8, natural lighting';
+                if (document.getElementById('fluxSonyA7') && document.getElementById('fluxSonyA7').checked) promptText += ', shot on Sony A7IV, clean sharp, high dynamic range';
+                if (document.getElementById('fluxCanon5D') && document.getElementById('fluxCanon5D').checked) promptText += ', Canon 5D Mark IV, 24-70mm at 35mm, golden hour, shallow depth of field';
+                if (document.getElementById('fluxFujiXT') && document.getElementById('fluxFujiXT').checked) promptText += ', shot on Fujifilm X-T5, 35mm f/1.4';
+                if (document.getElementById('fluxGoldenHour') && document.getElementById('fluxGoldenHour').checked) promptText += ', golden hour, warm light, soft shadows';
+                if (document.getElementById('fluxShallowDOF') && document.getElementById('fluxShallowDOF').checked) promptText += ', shallow depth of field, bokeh, subject isolation';
+                // Quality/technical
                 if (document.getElementById('fluxSharp') && document.getElementById('fluxSharp').checked) promptText += ', sharp focus, crisp details';
                 if (document.getElementById('fluxDetail') && document.getElementById('fluxDetail').checked) promptText += ', highly detailed, intricate textures';
                 if (document.getElementById('fluxRealism') && document.getElementById('fluxRealism').checked) promptText += ', photorealistic, realistic lighting and shadows';
-                if (document.getElementById('fluxNatural') && document.getElementById('fluxNatural').checked) promptText += ', natural lighting, soft ambient glow';
                 if (document.getElementById('fluxArtistic') && document.getElementById('fluxArtistic').checked) promptText += ', artistic quality, gallery worthy';
             } else if (selectedPlatform === 'chatgpt' || selectedPlatform === 'stable') {
                 // DALL-E / SD extra qualifiers
