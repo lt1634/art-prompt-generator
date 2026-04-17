@@ -598,6 +598,9 @@
                     <input type="checkbox" id="mjSw" style="accent-color: var(--accent);"> --sw 100 (風格強度)
                 </label>
                 <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
+                    <input type="checkbox" id="mjDraft" style="accent-color: var(--accent);"> --draft (快速草圖)
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
                     <input type="checkbox" id="mjTile" style="accent-color: var(--accent);"> --tile (無縫瓷磚)
                 </label>
             </div>
@@ -1007,6 +1010,7 @@
                 if (document.getElementById('mjNiji').checked) mjParts.push('--niji 7');
                 if (document.getElementById('mjRaw').checked) mjParts.push('--raw');
                 if (document.getElementById('mjSw').checked) mjParts.push('--sw 100');
+                if (document.getElementById('mjDraft').checked) mjParts.push('--draft');
                 if (document.getElementById('mjTile').checked) mjParts.push('--tile');
             }
 
