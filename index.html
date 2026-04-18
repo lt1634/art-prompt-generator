@@ -577,11 +577,14 @@
         
         <!-- Midjourney Parameters (shown when platform = midjourney/niji/auto) -->
         <div id="mjParamBox" style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0;">
-            <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Midjourney V8 參數</div>
+            <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Midjourney V8.1 參數</div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="mjHd" style="accent-color: var(--accent);"> --hd (2K HD)
-                </label>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                    <span style="white-space:nowrap;">--iw</span>
+                    <input type="range" id="mjIw" min="0.1" max="2" step="0.1" value="1" style="accent-color: var(--accent); width: 80px;" oninput="document.getElementById('mjIwVal').textContent=this.value">
+                    <span id="mjIwVal">1</span>
+                    <span style="font-size: 11px; color: var(--muted); white-space:nowrap;">圖片权重</span>
+                </div>
                 <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
                     <input type="checkbox" id="mjQ4" style="accent-color: var(--accent);"> --q 4 (高一致性)
                 </label>
@@ -773,7 +776,7 @@
         
         <!-- Image Reference Helper -->
         <div class="img-ref-box">
-            <div class="section-label">🖼️ Image Reference（V8.1 即將支援）</div>
+            <div class="section-label">🖼️ Image Reference（V8.1 已支援）</div>
             <div class="img-ref-input-row">
                 <input type="text" class="img-ref-input" id="imgRefInput" placeholder="貼上圖片 URL（Midjourney / 任何公開連結）...">
                 <button class="img-ref-btn" onclick="applyImgRef()">✅ 套用</button>
@@ -783,7 +786,7 @@
                 <div class="img-ref-output" id="imgRefOutput"></div>
                 <button class="img-ref-clear" onclick="clearImgRef()" title="清除">✕</button>
             </div>
-            <div class="img-ref-tip">💡 V8.1 即將支援上傳圖片作為 Prompt 的一部分。一張參考圖勝過千言萬語。</div>
+            <div class="img-ref-tip">💡 V8.1 圖片權重已恢復！配合 --iw 參數調整圖片與文字的影響比例。</div>
         </div>
 
         <!-- Buttons -->
@@ -1004,7 +1007,8 @@
                 if (document.getElementById('sdControl') && document.getElementById('sdControl').checked) promptText += ', ControlNet compatible composition';
             } else {
                 // Midjourney / Niji / Auto: default MJ params
-                if (document.getElementById('mjHd').checked) mjParts.push('--hd');
+                const mjIwVal = document.getElementById('mjIw').value;
+                if (mjIwVal && mjIwVal !== '0') mjParts.push('--iw ' + mjIwVal);
                 if (document.getElementById('mjQ4').checked) mjParts.push('--q 4');
                 if (document.getElementById('mjVary').checked) mjParts.push('--vary');
                 if (document.getElementById('mjNiji').checked) mjParts.push('--niji 7');
