@@ -1,41 +1,25 @@
 # 🎨 Art Prompt Generator
 
-A simple, beautiful tool to spark creativity for art teachers and creators.
+A simple, beautiful prompt generator to spark creativity for art teachers and creators.
 
 ---
 
 ## Features
 
-- **6 Categories:** Abstract, Nature, Emotion, Character, Technique, **3D** (Cartoon, Isometric, Product, Portrait, Fantasy, Food, Abstract)
-- **Random Generation:** One-click prompts with creative hints
-- **Real/Imperfect Toggle:** Adds film grain, documentary style, handheld shake, vintage 35mm look
-- **Camera/Lens Parameters:** 20% chance of Canon 50mm, Sony 85mm, wide angle 24mm, macro, bokeh f/1.2
-- **Favorites:** Save your best prompts to localStorage
-- **HK Time Display:** Because we're in Hong Kong 🇭🇰
-- **Dark Mode:** Easy on the eyes, works great at 3AM
-- **Local Server:** Run on http://localhost:8080
+- **Categories:** Parenting, Teaching, Art, Nature, Character, 3D, Chibi, Ink
+- **One-tap Generate:** Get a fresh prompt instantly
+- **Real/Imperfect Toggle:** Optional “raw / imperfect” flavor (film grain, documentary vibe)
+- **Favorites & Recent:** Saved locally in your browser (localStorage)
+- **Share / Copy:** Quick share and copy buttons for mobile workflow
 
 ---
 
 ## How to Use
 
 1. Open `index.html` in any browser
-2. Click **Generate** for a random art prompt
-3. Use **filters** to narrow down categories
-4. Click **★ Save** to add to favorites
-
----
-
-## Categories
-
-| Category | Description |
-|----------|-------------|
-| Abstract | Geometric, minimal, conceptual |
-| Nature | Landscapes, flora, environmental |
-| Emotion | Feelings, moods, inner states |
-| Character | People, portraits, figures |
-| Technique | Methods, styles, approaches |
-| **3D** | Cartoon, Isometric, Product, Portrait, Fantasy, Food, Abstract |
+2. Tap **Generate** for a random prompt
+3. Use category buttons to narrow the pool
+4. Tap **Save** to add to favorites
 
 ---
 
@@ -44,18 +28,14 @@ A simple, beautiful tool to spark creativity for art teachers and creators.
 - **Pure HTML/CSS/JS:** No dependencies, works offline
 - **LocalStorage:** Favorites persist across sessions
 - **Responsive:** Works on mobile and desktop
-- **HK Context:** Timezone-aware, localized feel
+- **No “Pro” mode:** This repo intentionally keeps the original, simple experience
 
 ---
 
 ## Future Ideas
 
-- [ ] Export favorites as PDF
-- [ ] Difficulty levels (beginner → advanced)
-- [ ] "Spin the wheel" random selector
-- [ ] Integration with lesson planning
-- [ ] Timer for timed challenges
-- [ ] Share prompt to social media
+- [ ] Better prompt templates per platform (without UI complexity)
+- [ ] Curated packs (e.g., “DSE Visual Arts”, “Kids art class warmups”)
 
 ---
 
