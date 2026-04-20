@@ -29,6 +29,7 @@ A simple, beautiful prompt generator to spark creativity for art teachers and cr
 - **LocalStorage:** Favorites persist across sessions
 - **Responsive:** Works on mobile and desktop
 - **No “Pro” mode:** This repo intentionally keeps the original, simple experience
+- **Deployment:** `art-prompt-generator-psi.vercel.app`
 
 ---
 
