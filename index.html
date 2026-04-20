@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎨 Art Prompt Generator Pro</title>
+    <title>🎨 Art Prompt Generator</title>
     <style>
         * {
             margin: 0;
@@ -459,7 +459,6 @@
         .toast.show {
             opacity: 1;
         }
-    </style>
 
         /* Recent Prompts */
         .recent {
@@ -543,13 +542,14 @@
         .btn-import:hover {
             border-color: var(--accent);
         }
+    </style>
 
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎨 Art Prompt Pro</h1>
-            <p class="subtitle">AI Art提示生成器 | 香港美術老師</p>
+            <h1>🎨 Art Prompt Generator</h1>
+            <p class="subtitle">Spark creativity for your next piece · AI Art 提示生成器｜香港美術老師</p>
         </header>
         
         <!-- Categories -->
@@ -575,192 +575,6 @@
             <span class="toggle-desc">真實/不完美</span>
         </div>
         
-        <!-- Midjourney Parameters (shown when platform = midjourney/niji/auto) -->
-        <div id="mjParamBox" style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0;">
-            <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Midjourney V8.1 參數</div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 6px; font-size: 13px;">
-                    <span style="white-space:nowrap;">--iw</span>
-                    <input type="range" id="mjIw" min="0.1" max="2" step="0.1" value="1" style="accent-color: var(--accent); width: 80px;" oninput="document.getElementById('mjIwVal').textContent=this.value">
-                    <span id="mjIwVal">1</span>
-                    <span style="font-size: 11px; color: var(--muted); white-space:nowrap;">圖片权重</span>
-                </div>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="mjQ4" style="accent-color: var(--accent);"> --q 4 (高一致性)
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="mjVary" style="accent-color: var(--accent);"> --vary (多版本)
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="mjNiji" style="accent-color: var(--accent);"> --niji 7 (動漫風)
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="mjRaw" style="accent-color: var(--accent);"> --raw (真實攝影)
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="mjSw" style="accent-color: var(--accent);"> --sw 100 (風格強度)
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="mjDraft" style="accent-color: var(--accent);"> --draft (快速草圖)
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="mjTile" style="accent-color: var(--accent);"> --tile (無縫瓷磚)
-                </label>
-            </div>
-        </div>
-
-        <!-- FLUX Parameters (shown when platform = flux) -->
-        <div id="fluxParamBox" style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0; display: none;">
-            <div style="font-size: 12px; color: #00d4aa; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">FLUX 2 Pro 風格參數</div>
-            <div style="margin-bottom: 12px;">
-                <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">膠片 / 數碼風格</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxModernDigital" style="accent-color: #00d4aa;"> Modern Digital
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxDigicam" style="accent-color: #00d4aa;"> 2000s Digicam
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="flux80sVintage" style="accent-color: #00d4aa;"> 80s Vintage
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxAnalogFilm" style="accent-color: #00d4aa;"> Analog Film
-                    </label>
-                </div>
-            </div>
-            <div style="margin-bottom: 12px;">
-                <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">相機 / 鏡頭模擬</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxHasselblad" style="accent-color: #00d4aa;"> Hasselblad X2D
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxSonyA7" style="accent-color: #00d4aa;"> Sony A7IV
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxCanon5D" style="accent-color: #00d4aa;"> Canon 5D MKIV
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxFujiXT" style="accent-color: #00d4aa;"> Fujifilm X-T5
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxGoldenHour" style="accent-color: #00d4aa;"> Golden Hour
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxShallowDOF" style="accent-color: #00d4aa;"> Shallow DOF
-                    </label>
-                </div>
-            </div>
-            <div>
-                <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">品質 / 技術</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxSharp" style="accent-color: #00d4aa;"> Sharp Focus
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxDetail" style="accent-color: #00d4aa;"> High Detail
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxRealism" style="accent-color: #00d4aa;"> Photorealistic
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer;">
-                        <input type="checkbox" id="fluxArtistic" style="accent-color: #00d4aa;"> Artistic Quality
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <!-- DALL-E / SD Parameters (shown when platform = chatgpt/stable) -->
-        <div id="dalleParamBox" style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0; display: none;">
-            <div style="font-size: 12px; color: #f59e0b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">DALL-E / SD 提示增強</div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="dalleStyle" style="accent-color: #f59e0b;"> --style vivid
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="dalleQuality" style="accent-color: #f59e0b;"> --quality high
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="dalleNatural" style="accent-color: #f59e0b;"> natural look
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="sdLora" style="accent-color: #f59e0b;"> SDXL + LoRA
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer;">
-                    <input type="checkbox" id="sdControl" style="accent-color: #f59e0b;"> ControlNet ready
-                </label>
-            </div>
-        </div>
-        
-        <!-- Camera/Lens Dropdown -->
-        <div style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0;">
-            <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Camera / Lens 參數</div>
-            <select id="cameraSelect" style="width: 100%; padding: 10px; background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text); font-size: 14px; cursor: pointer;">
-                <option value="">隨機 (20% 機會添加)</option>
-                <option value=", shot on Canon 50mm f/1.8">Canon 50mm f/1.8</option>
-                <option value=", shot on Sony 85mm f/1.4">Sony 85mm f/1.4</option>
-                <option value=", shot on Fujifilm X-T4">Fujifilm X-T4</option>
-                <option value=", wide angle 24mm">Wide Angle 24mm</option>
-                <option value=", macro lens close-up">Macro Lens</option>
-                <option value=", bokeh background f/1.2">Bokeh f/1.2</option>
-                <option value=", depth of field, film photography">Depth of Field</option>
-                <option value=", ISO 100, professional photography">ISO 100 Pro</option>
-                <option value=", no camera, pure digital art">無相機 (純數碼)</option>
-            </select>
-        </div>
-        
-        <!-- Aspect Ratio Selector (V8 compatible) -->
-        <div style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0;">
-            <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">📐 Aspect Ratio（--ar）</div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value="" checked style="display:none;">隨機</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 1:1" style="display:none;">1:1 □</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 3:2" style="display:none;">3:2 ▭</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 2:3" style="display:none;">2:3 ▯</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 4:3" style="display:none;">4:3 ▭</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 3:4" style="display:none;">3:4 ▯</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 16:9" style="display:none;">16:9 ▭</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 21:9" style="display:none;">🔥 21:9 超寬</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 5:4" style="display:none;">🆕 5:4</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 4:5" style="display:none;">🆕 4:5</label>
-                <label style="background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; cursor: pointer; font-size: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"><input type="radio" name="aspectRatio" value=" --ar 6:11" style="display:none;">🆕 6:11</label>
-            </div>
-            <div id="arHint" style="font-size: 11px; color: var(--muted); margin-top: 8px;">🆕 = V8 Alpha 新比例（2026-03-17）</div>
-        </div>
-
-        <!-- Negative Prompt Helper -->
-        <div class="neg-prompt-box">
-            <div class="section-label">🚫 Negative Prompt（--no 排除）</div>
-            <div class="neg-grid">
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="watermark"> watermark</label>
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="text"> text</label>
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="logo, signature"> logo / signature</label>
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="blurry, out of focus"> blurry</label>
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="extra fingers"> extra fingers</label>
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="deformed, ugly"> deformed / ugly</label>
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="low quality, jpeg artifacts"> low quality</label>
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="oversaturated"> oversaturated</label>
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="anime, cartoon style"> anime / cartoon</label>
-                <label class="neg-item"><input type="checkbox" class="neg-check" value="photorealistic"> photorealistic</label>
-            </div>
-            <div class="neg-summary" id="negSummary">揀選要排除的元素 → 自動加入 --no</div>
-        </div>
-
-        <!-- Platform Tips -->
-        <div style="background: var(--card); border-radius: 12px; padding: 15px; margin: 15px 0;">
-            <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Platform 提示</div>
-            <select id="platformSelect" style="width: 100%; padding: 10px; background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text); font-size: 14px; cursor: pointer; margin-bottom: 10px;">
-                <option value="auto">自動偵測</option>
-                <option value="midjourney">Midjourney</option>
-                <option value="chatgpt">ChatGPT (DALL-E)</option>
-                <option value="stable">Stable Diffusion</option>
-                <option value="niji">Niji Journey</option>
-                <option value="flux">FLUX 2 Pro</option>
-            </select>
-            <div id="platformTip" style="font-size: 12px; color: var(--muted); line-height: 1.5;"></div>
-        </div>
-        
         <!-- Prompt Display -->
         <div class="prompt-box" id="promptBox">
             <div class="category-label" id="categoryLabel">點擊生成</div>
@@ -769,24 +583,7 @@
                 <div><strong>Style:</strong> <span id="detailStyle">-</span></div>
                 <div><strong>Mood:</strong> <span id="detailMood">-</span></div>
                 <div><strong>Colors:</strong> <span id="detailColors">-</span></div>
-                <div id="detailParams" style="display:none; margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1);"><strong>Midjourney:</strong> <span id="detailMjParams">-</span></div>
-                <div id="detailNeg" style="display:none; margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1); color: var(--accent);"><strong>--no:</strong> <span id="detailNegParams">-</span></div>
             </div>
-        </div>
-        
-        <!-- Image Reference Helper -->
-        <div class="img-ref-box">
-            <div class="section-label">🖼️ Image Reference（V8.1 已支援）</div>
-            <div class="img-ref-input-row">
-                <input type="text" class="img-ref-input" id="imgRefInput" placeholder="貼上圖片 URL（Midjourney / 任何公開連結）...">
-                <button class="img-ref-btn" onclick="applyImgRef()">✅ 套用</button>
-            </div>
-            <div class="img-ref-preview" id="imgRefPreview">
-                <img id="imgRefThumb" src="" alt="ref">
-                <div class="img-ref-output" id="imgRefOutput"></div>
-                <button class="img-ref-clear" onclick="clearImgRef()" title="清除">✕</button>
-            </div>
-            <div class="img-ref-tip">💡 V8.1 圖片權重已恢復！配合 --iw 參數調整圖片與文字的影響比例。</div>
         </div>
 
         <!-- Buttons -->
@@ -919,16 +716,6 @@
             ]
         };
         
-        // Platform tips database
-        const platformTips = {
-            auto: "",
-            midjourney: "💡 Midjourney V7/V8: Add --raw for authentic/photographic style (no aesthetic smoothing). Use --s 750 for stylize, --sw 100 for style reference strength, --q 2 for quality. Voice prompt: describe scene aloud — V7 understands natural speech. Style Creator (V8): build personal style codes.",
-            chatgpt: "💡 DALL-E: Describe scene directly in natural language. Include artistic style, lighting mood, and color palette in one sentence. No need for camera parameters.",
-            stable: "💡 Stable Diffusion: Use commas to separate elements. Add quality tags: 'masterpiece, best quality'. Use (brackets) for emphasis: (emphasis). Use [brackets] to de-emphasize.",
-            niji: "💡 Niji Journey: Add '--niji 6/7' for anime mode. Use anime-specific terms: 'anime screencap', 'semi-realistic', 'cel shading'. Great for character design and manga style.",
-            flux: "💡 FLUX 2 Pro: Write in natural prose like describing to a human artist. No negative prompts — use positive phrasing ('sharp focus' not 'no blur'). 30–80 words is ideal. Front-load the subject — AI prioritizes the beginning of your prompt."
-        };
-        
         let currentPrompt = null;
         let favorites = [];
         let recentPrompts = [];
@@ -941,7 +728,7 @@
             if (!Array.isArray(recentPrompts)) recentPrompts = [];
         } catch (e) { recentPrompts = []; }
         
-        // Generate Prompt
+        // Generate Prompt（精簡版：隨機主句 + 可選真實/不完美，不加平台參數）
         function generatePrompt() {
             const activeCat = document.querySelector('.cat-btn.active').dataset.cat;
             let pool = [];
@@ -959,9 +746,7 @@
             
             const random = pool[Math.floor(Math.random() * pool.length)];
             let promptText = random.text;
-            const negVals = getNegVals();
-            
-            // Apply imperfect/authentic modifiers
+
             if (imperfectMode) {
                 const imperfectModifiers = [
                     ", film grain, analog photography aesthetic",
@@ -973,89 +758,11 @@
                 const modifier = imperfectModifiers[Math.floor(Math.random() * imperfectModifiers.length)];
                 promptText += modifier;
             }
-            
-            // Apply platform-specific parameters
-            var selectedPlatform = document.getElementById('platformSelect').value;
-            var mjParts = [];
-            if (negVals.length > 0) mjParts.push('--no ' + negVals.join(', '));
 
-            if (selectedPlatform === 'flux') {
-                // FLUX 2 Pro: positive phrasing, no --no style
-                // Film/digital style
-                if (document.getElementById('fluxModernDigital') && document.getElementById('fluxModernDigital').checked) promptText += ', shot on Sony A7IV, clean sharp, high dynamic range';
-                if (document.getElementById('fluxDigicam') && document.getElementById('fluxDigicam').checked) promptText += ', early digital camera, slight noise, flash photography, candid, 2000s digicam style';
-                if (document.getElementById('flux80sVintage') && document.getElementById('flux80sVintage').checked) promptText += ', film grain, warm color cast, soft focus, 80s vintage photo';
-                if (document.getElementById('fluxAnalogFilm') && document.getElementById('fluxAnalogFilm').checked) promptText += ', shot on Kodak Portra 400, natural grain, organic colors';
-                // Camera/lens simulation
-                if (document.getElementById('fluxHasselblad') && document.getElementById('fluxHasselblad').checked) promptText += ', Hasselblad X2D, 80mm lens, f/2.8, natural lighting';
-                if (document.getElementById('fluxSonyA7') && document.getElementById('fluxSonyA7').checked) promptText += ', shot on Sony A7IV, clean sharp, high dynamic range';
-                if (document.getElementById('fluxCanon5D') && document.getElementById('fluxCanon5D').checked) promptText += ', Canon 5D Mark IV, 24-70mm at 35mm, golden hour, shallow depth of field';
-                if (document.getElementById('fluxFujiXT') && document.getElementById('fluxFujiXT').checked) promptText += ', shot on Fujifilm X-T5, 35mm f/1.4';
-                if (document.getElementById('fluxGoldenHour') && document.getElementById('fluxGoldenHour').checked) promptText += ', golden hour, warm light, soft shadows';
-                if (document.getElementById('fluxShallowDOF') && document.getElementById('fluxShallowDOF').checked) promptText += ', shallow depth of field, bokeh, subject isolation';
-                // Quality/technical
-                if (document.getElementById('fluxSharp') && document.getElementById('fluxSharp').checked) promptText += ', sharp focus, crisp details';
-                if (document.getElementById('fluxDetail') && document.getElementById('fluxDetail').checked) promptText += ', highly detailed, intricate textures';
-                if (document.getElementById('fluxRealism') && document.getElementById('fluxRealism').checked) promptText += ', photorealistic, realistic lighting and shadows';
-                if (document.getElementById('fluxArtistic') && document.getElementById('fluxArtistic').checked) promptText += ', artistic quality, gallery worthy';
-            } else if (selectedPlatform === 'chatgpt' || selectedPlatform === 'stable') {
-                // DALL-E / SD extra qualifiers
-                if (document.getElementById('dalleStyle') && document.getElementById('dalleStyle').checked) promptText += ', style: vivid, bold colors';
-                if (document.getElementById('dalleQuality') && document.getElementById('dalleQuality').checked) promptText += ', high quality, detailed';
-                if (document.getElementById('dalleNatural') && document.getElementById('dalleNatural').checked) promptText += ', natural look, realistic';
-                if (document.getElementById('sdLora') && document.getElementById('sdLora').checked) promptText += ', SDXL, cinematic LoRA style';
-                if (document.getElementById('sdControl') && document.getElementById('sdControl').checked) promptText += ', ControlNet compatible composition';
-            } else {
-                // Midjourney / Niji / Auto: default MJ params
-                const mjIwVal = document.getElementById('mjIw').value;
-                if (mjIwVal && mjIwVal !== '0') mjParts.push('--iw ' + mjIwVal);
-                if (document.getElementById('mjQ4').checked) mjParts.push('--q 4');
-                if (document.getElementById('mjVary').checked) mjParts.push('--vary');
-                if (document.getElementById('mjNiji').checked) mjParts.push('--niji 7');
-                if (document.getElementById('mjRaw').checked) mjParts.push('--raw');
-                if (document.getElementById('mjSw').checked) mjParts.push('--sw 100');
-                if (document.getElementById('mjDraft').checked) mjParts.push('--draft');
-                if (document.getElementById('mjTile').checked) mjParts.push('--tile');
-            }
-
-            // Apply aspect ratio (V8 new ratios: 5:4, 4:5, 6:11, 21:9)
-            const arSelected = document.querySelector('input[name="aspectRatio"]:checked');
-            const arValue = arSelected ? arSelected.value : '';
-            if (arValue) mjParts.push(arValue.trim());
-
-            // Apply camera/lens (dropdown or random)
-            const cameraSelect = document.getElementById('cameraSelect');
-            const selectedCam = cameraSelect.value;
-            if (selectedCam) {
-                promptText += selectedCam;
-            } else if (Math.random() < 0.2) {
-                const cameraParams = [
-                    ", shot on Canon 50mm f/1.8",
-                    ", shot on Sony 85mm f/1.4",
-                    ", shot on Fujifilm X-T4",
-                    ", wide angle 24mm",
-                    ", macro lens close-up",
-                    ", bokeh background f/1.2"
-                ];
-                const camParam = cameraParams[Math.floor(Math.random() * cameraParams.length)];
-                promptText += camParam;
-            }
-
-            // Prepend image reference (V8.1 img URL support)
-            const imgRefUrl = document.getElementById('imgRefInput').value.trim();
-            if (imgRefUrl) {
-                promptText = imgRefUrl + ' ' + promptText;
-            }
-
-            // Append MJ params
-            if (mjParts.length > 0) promptText += ' ' + mjParts.join(' ');
-
-            // Add retry tip
             promptText += "\n\n💡 Tip: Submit multiple times for different results";
             
             currentPrompt = { text: promptText, style: random.style, mood: random.mood, colors: random.colors };
             
-            // Display
             const catNames = { parenting: '👨‍👩‍👧 親子活動', teaching: '🏫 教學', art: '🎨 藝術', nature: '🌳 自然', character: '👤 人物', '3d': '🧊 3D', chibi: '🧸 Chibi', ink: '🖌️ 水墨' };
             document.getElementById('categoryLabel').textContent = catNames[activeCat] || '全部';
             document.getElementById('promptText').textContent = promptText;
@@ -1063,27 +770,7 @@
             document.getElementById('detailStyle').textContent = random.style;
             document.getElementById('detailMood').textContent = random.mood;
             document.getElementById('detailColors').textContent = random.colors;
-            
-            // Show Midjourney params in details
-            const nonNegParts = mjParts.filter(function(p) { return !p.startsWith('--no'); });
-            const detailParams = document.getElementById('detailParams');
-            if (nonNegParts.length > 0) {
-                detailParams.style.display = 'block';
-                document.getElementById('detailMjParams').textContent = nonNegParts.join(' ');
-            } else {
-                detailParams.style.display = 'none';
-            }
 
-            // Show negative prompt in details
-            const detailNeg = document.getElementById('detailNeg');
-            if (negVals.length > 0) {
-                detailNeg.style.display = 'block';
-                document.getElementById('detailNegParams').textContent = negVals.join(', ');
-            } else {
-                detailNeg.style.display = 'none';
-            }
-
-            // Save to recent
             recentPrompts.unshift({ text: promptText, style: random.style, timestamp: Date.now() });
             if (recentPrompts.length > 5) recentPrompts = recentPrompts.slice(0, 5);
             localStorage.setItem('artPrompts_recent', JSON.stringify(recentPrompts));
@@ -1237,58 +924,6 @@
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
         
-        // Negative Prompt Helper
-        // Image Reference Helper
-        let imgRefActive = false;
-
-        function applyImgRef() {
-            const input = document.getElementById('imgRefInput');
-            const url = input.value.trim();
-            const preview = document.getElementById('imgRefPreview');
-            const thumb = document.getElementById('imgRefThumb');
-            const output = document.getElementById('imgRefOutput');
-
-            if (!url) {
-                showToast('請先貼上圖片 URL');
-                return;
-            }
-
-            // Basic URL validation
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                showToast('請輸入有效的 URL（需以 http:// 或 https:// 開頭）');
-                return;
-            }
-
-            imgRefActive = true;
-            thumb.src = url;
-            thumb.onerror = function() { thumb.style.display = 'none'; };
-            thumb.onload = function() { thumb.style.display = 'block'; };
-
-            // Show syntax hint
-            const filename = url.split('/').pop().substring(0, 30) || 'image';
-            output.textContent = url + ' [將自動加到 prompt 最前方] — V8.1 完整支援';
-            preview.classList.add('active');
-            showToast('已套用圖片參考！');
-        }
-
-        function clearImgRef() {
-            document.getElementById('imgRefInput').value = '';
-            document.getElementById('imgRefPreview').classList.remove('active');
-            document.getElementById('imgRefThumb').src = '';
-            document.getElementById('imgRefOutput').textContent = '';
-            imgRefActive = false;
-        }
-
-        function getNegVals() {
-            return Array.from(document.querySelectorAll('.neg-check:checked')).map(function(cb) { return cb.value; });
-        }
-        document.querySelectorAll('.neg-check').forEach(function(cb) {
-            cb.addEventListener('change', function() {
-                var v = getNegVals();
-                document.getElementById('negSummary').textContent = v.length > 0 ? '--no ' + v.join(', ') : '揀選要排除的元素 → 自動加入 --no';
-            });
-        });
-
         // Recent Prompts functions
         function useRecent(i) {
             currentPrompt = { text: recentPrompts[i].text, style: recentPrompts[i].style };
@@ -1298,8 +933,6 @@
             document.getElementById('detailStyle').textContent = recentPrompts[i].style;
             document.getElementById('detailMood').textContent = '-';
             document.getElementById('detailColors').textContent = '-';
-            document.getElementById('detailParams').style.display = 'none';
-            document.getElementById('detailNeg').style.display = 'none';
         }
         function copyRecent(i) {
             navigator.clipboard.writeText(recentPrompts[i].text);
@@ -1322,31 +955,6 @@
             }).join('');
         }
 
-        // Platform tip display
-        const platformSelect = document.getElementById('platformSelect');
-        const platformTip = document.getElementById('platformTip');
-        if (platformSelect) {
-            platformSelect.addEventListener('change', () => {
-                // Update platform tip
-            platformTip.textContent = platformTips[platformSelect.value] || '';
-
-            // Toggle platform-specific parameter boxes
-            var p = platformSelect.value;
-            var mjBox = document.getElementById('mjParamBox');
-            var fluxBox = document.getElementById('fluxParamBox');
-            var dalleBox = document.getElementById('dalleParamBox');
-            if (mjBox) mjBox.style.display = (p === 'auto' || p === 'midjourney' || p === 'niji') ? 'block' : 'none';
-            if (fluxBox) fluxBox.style.display = (p === 'flux') ? 'block' : 'none';
-            if (dalleBox) dalleBox.style.display = (p === 'chatgpt' || p === 'stable') ? 'block' : 'none';
-        });
-        platformTip.textContent = platformTips['auto'];
-        // Init: show MJ box by default
-        (function initParamBox() {
-            var mjBox = document.getElementById('mjParamBox');
-            if (mjBox) mjBox.style.display = 'block';
-        })();
-        }
-        
         // Export Data
         function exportData() {
             const data = {
